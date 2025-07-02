@@ -1,25 +1,42 @@
-export function Dashboard() {
-    return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <header className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Expense Tracker Dashboard</h1>
-                <p className="text-gray-600 mt-1">Track your expenses easily and clearly</p>
-            </header>
+import { useState } from 'react';
+import { TransactionForm } from './TransactionForm';
+import { BalanceCard } from './BalanceCard';
 
-            <main className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-lg shadow p-4">
-                    <h2 className="text-xl font-semibold mb-2">Total Expenses</h2>
-                    <p className="text-3xl font-bold">$0.00</p>
-                </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                    <h2 className="text-xl font-semibold mb-2">Monthly Budget</h2>
-                    <p className="text-3xl font-bold">$0.00</p>
-                </div>
-                <div className="bg-white rounded-lg shadow p-4">
-                    <h2 className="text-xl font-semibold mb-2">Remaining Balance</h2>
-                    <p className="text-3xl font-bold">$0.00</p>
-                </div>
-            </main>
+export function Dashboard() {
+    const [transactions, setTransactions] = useState([]);
+
+    const addTransaction = (transaction) => {
+        setTransactions([...transactions, transaction]);
+    };
+
+    const income = transactions
+        .filter((t) => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const expenses = transactions
+        .filter((t) => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const balance = income - expenses;
+
+    return (
+        <div className="max-w-xl mx-auto mt-10 p-4">
+            <h1 className="text-3xl font-bold text-center mb-6">Expense Tracker</h1>
+            <BalanceCard income={income} expenses={expenses} balance={balance} />
+            <TransactionForm onAdd={addTransaction} />
+            <div className="mt-6">
+                <h2 className="text-xl font-semibold mb-2">Transaction History</h2>
+                <ul className="space-y-2">
+                    {transactions.map((t, index) => (
+                        <li key={index} className="flex justify-between bg-gray-100 p-2 rounded">
+                            <span>{t.description}</span>
+                            <span className={t.type === 'income' ? 'text-green-600' : 'text-red-600'}>
+                                {t.type === 'expense' ? '-' : '+'}€{t.amount.toFixed(2)}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }
