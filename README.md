@@ -6,7 +6,7 @@
 
 A sleek and modern dashboard app for tracking your expenses and managing your budget efficiently. Built with React and Tailwind CSS, it offers an intuitive interface to add, view, and analyze your spending habits.
 
-🔗 Site published at: https://github.com/YourUsername/expense-tracker-dashboard
+🔗 Site published at: https://github.com/MantasKukulskis/expense-tracker-dashboard
 
 🎯 Project features/goals
 
@@ -32,7 +32,7 @@ Want to try it on your machine? Open your terminal and follow these steps:
 1. Clone the repo:
 
 ```bash
-git clone https://github.com/YourUsername/expense-tracker-dashboard.git
+git clone https://github.com/MantasKukulskis/expense-tracker-dashboard.git
 cd expense-tracker-dashboard
 
     Install dependencies:
@@ -51,7 +51,7 @@ There are no automated tests for this project yet.
 
 👨‍💻 Authors
 
-Your Name: https://github.com/YourUsername
+Mantas: https://github.com/MantasKukulskis
 
 ⚠️ License
 
