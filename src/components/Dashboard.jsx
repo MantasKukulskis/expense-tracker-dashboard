@@ -6,6 +6,7 @@ import {
     onSnapshot,
     query
 } from 'firebase/firestore';
+import { getAuth, signOut } from 'firebase/auth';  // import logout funkcijai
 
 export function Dashboard() {
     const [transactions, setTransactions] = useState([]);
@@ -14,6 +15,7 @@ export function Dashboard() {
     const [type, setType] = useState('income');
 
     const transactionsRef = collection(db, 'transactions');
+    const auth = getAuth();
 
     useEffect(() => {
         const q = query(transactionsRef);
@@ -39,7 +41,7 @@ export function Dashboard() {
             await addDoc(transactionsRef, {
                 description,
                 amount: signedAmount,
-                type, // <- būtina pridėti!
+                type,
                 created: Date.now()
             });
 
@@ -61,9 +63,30 @@ export function Dashboard() {
 
     const balance = income + expenses;
 
+    // logout funkcija
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            // gali nukreipti vartotoją į login puslapį, jei naudojiesi react-router
+            // pvz.: navigate('/login');
+        } catch (error) {
+            console.error("❌ Error during logout:", error);
+        }
+    };
+
     return (
         <div className="max-w-md mx-auto p-4 space-y-6">
             <h1 className="text-3xl font-bold text-center">💸 Expense Tracker</h1>
+
+            {/* Logout mygtukas */}
+            <div className="flex justify-end">
+                <button
+                    onClick={handleLogout}
+                    className="bg-red-600 text-white px-4 py-2 rounded"
+                >
+                    Logout
+                </button>
+            </div>
 
             {/* Form */}
             <form onSubmit={handleAddTransaction} className="space-y-2">
@@ -124,3 +147,4 @@ export function Dashboard() {
         </div>
     );
 }
+
