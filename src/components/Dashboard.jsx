@@ -5,25 +5,28 @@ import {
     addDoc,
     onSnapshot,
     query,
-    where
+    where,
+    orderBy
 } from 'firebase/firestore';
 import { getAuth, signOut } from 'firebase/auth';
 
-export function Dashboard() {
+export function Dashboard({ user }) {
     const [transactions, setTransactions] = useState([]);
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
     const [type, setType] = useState('income');
 
     const auth = getAuth();
-    const user = auth.currentUser;
-    const transactionsRef = collection(db, 'transactions');
 
-    // Real-time listener tik savo vartotojo duomenims
     useEffect(() => {
         if (!user) return;
 
-        const q = query(transactionsRef, where("uid", "==", user.uid));
+        const q = query(
+            collection(db, 'transactions'),
+            where('userId', '==', user.uid),
+            orderBy('created', 'desc')
+        );
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const items = snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -39,18 +42,16 @@ export function Dashboard() {
         e.preventDefault();
         if (!description || !amount) return;
 
-        if (!user) return;
-
         const numericAmount = parseFloat(amount);
         const signedAmount = type === 'expense' ? -Math.abs(numericAmount) : Math.abs(numericAmount);
 
         try {
-            await addDoc(transactionsRef, {
-                uid: user.uid,
+            await addDoc(collection(db, 'transactions'), {
                 description,
                 amount: signedAmount,
                 type,
-                created: Date.now()
+                created: Date.now(),
+                userId: user.uid
             });
 
             setDescription('');
@@ -74,8 +75,6 @@ export function Dashboard() {
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            // jei naudojamas react-router:
-            // navigate('/login');
         } catch (error) {
             console.error("❌ Error during logout:", error);
         }

@@ -1,22 +1,25 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Dashboard } from "./components/Dashboard";
-import { Login } from "./components/Login";
-import { useAuth } from "./context/AuthContext";
+import { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Dashboard } from './components/Dashboard';
+import { Login } from './components/Login';
 
-function App() {
-  const { currentUser } = useAuth();
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/"
-          element={currentUser ? <Dashboard /> : <Navigate to="/login" />}
-        />
-      </Routes>
-    </Router>
-  );
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
+
+  return user ? <Dashboard user={user} /> : <Login />;
 }
-
-export default App;
