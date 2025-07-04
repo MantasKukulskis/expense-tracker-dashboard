@@ -4,9 +4,10 @@ import {
     collection,
     addDoc,
     onSnapshot,
-    query
+    query,
+    where
 } from 'firebase/firestore';
-import { getAuth, signOut } from 'firebase/auth';  // import logout funkcijai
+import { getAuth, signOut } from 'firebase/auth';
 
 export function Dashboard() {
     const [transactions, setTransactions] = useState([]);
@@ -14,11 +15,15 @@ export function Dashboard() {
     const [amount, setAmount] = useState('');
     const [type, setType] = useState('income');
 
-    const transactionsRef = collection(db, 'transactions');
     const auth = getAuth();
+    const user = auth.currentUser;
+    const transactionsRef = collection(db, 'transactions');
 
+    // Real-time listener tik savo vartotojo duomenims
     useEffect(() => {
-        const q = query(transactionsRef);
+        if (!user) return;
+
+        const q = query(transactionsRef, where("uid", "==", user.uid));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const items = snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -28,17 +33,20 @@ export function Dashboard() {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [user]);
 
     const handleAddTransaction = async (e) => {
         e.preventDefault();
         if (!description || !amount) return;
+
+        if (!user) return;
 
         const numericAmount = parseFloat(amount);
         const signedAmount = type === 'expense' ? -Math.abs(numericAmount) : Math.abs(numericAmount);
 
         try {
             await addDoc(transactionsRef, {
+                uid: user.uid,
                 description,
                 amount: signedAmount,
                 type,
@@ -63,12 +71,11 @@ export function Dashboard() {
 
     const balance = income + expenses;
 
-    // logout funkcija
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            // gali nukreipti vartotoją į login puslapį, jei naudojiesi react-router
-            // pvz.: navigate('/login');
+            // jei naudojamas react-router:
+            // navigate('/login');
         } catch (error) {
             console.error("❌ Error during logout:", error);
         }
@@ -78,7 +85,6 @@ export function Dashboard() {
         <div className="max-w-md mx-auto p-4 space-y-6">
             <h1 className="text-3xl font-bold text-center">💸 Expense Tracker</h1>
 
-            {/* Logout mygtukas */}
             <div className="flex justify-end">
                 <button
                     onClick={handleLogout}
@@ -88,7 +94,6 @@ export function Dashboard() {
                 </button>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleAddTransaction} className="space-y-2">
                 <input
                     type="text"
@@ -117,7 +122,6 @@ export function Dashboard() {
                 </button>
             </form>
 
-            {/* Summary */}
             <div className="grid grid-cols-3 text-center gap-2">
                 <div>
                     <h2 className="text-sm text-gray-500">Income</h2>
@@ -133,7 +137,6 @@ export function Dashboard() {
                 </div>
             </div>
 
-            {/* Transaction list */}
             <ul className="divide-y">
                 {transactions.map(t => (
                     <li key={t.id} className="py-2 flex justify-between">
@@ -147,4 +150,3 @@ export function Dashboard() {
         </div>
     );
 }
-

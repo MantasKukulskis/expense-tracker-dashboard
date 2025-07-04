@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore"; // <- duomenų bazė
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB810jN0G5XZ0VpebJ99zEKs_V8RVcFIRY",
@@ -16,3 +17,5 @@ const app = initializeApp(firebaseConfig);
 
 // Gauti Firestore instanciją
 export const db = getFirestore(app);
+
+export const auth = getAuth(app);
