@@ -1,5 +1,6 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { useEffect, useState } from 'react';
 
 import { Home } from './routes/Home';
 import { BusinessDashboardPage } from './routes/BusinessDashboard';
@@ -12,12 +13,31 @@ import VerifyEmail from './components/auth/VerifyEmail';
 
 export default function App() {
   const { currentUser, loading } = useAuth();
+  const [verified, setVerified] = useState(null);
+  const navigate = useNavigate();
 
-  if (loading) {
+  useEffect(() => {
+    const checkVerification = async () => {
+      if (currentUser) {
+        await currentUser.reload();
+        const isVerified = currentUser.emailVerified;
+        setVerified(isVerified);
+
+        // Jei vartotojas patvirtino el. paštą, aktyviai nukreipiam
+        if (isVerified && window.location.pathname === '/verify-email') {
+          navigate('/');
+        }
+      } else {
+        setVerified(false);
+      }
+    };
+
+    checkVerification();
+  }, [currentUser, navigate]);
+
+  if (loading || verified === null) {
     return <div className="text-center mt-10">Loading...</div>;
   }
-
-  const isVerified = currentUser?.emailVerified;
 
   return (
     <Routes>
@@ -29,7 +49,7 @@ export default function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </>
-      ) : !isVerified ? (
+      ) : !verified ? (
         <>
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="*" element={<Navigate to="/verify-email" />} />
