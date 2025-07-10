@@ -92,3 +92,4 @@ MIT License — see LICENSE.txt for details.
     Firebase Docs
 
     Vite.js
+    <!-- Trigger workflow -->
