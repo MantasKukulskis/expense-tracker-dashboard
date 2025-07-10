@@ -8,7 +8,7 @@ export function Home() {
             <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 flex flex-col items-center text-center">
                     <img
-                        src="./public/img/business.png"
+                        src="/img/business.png"
                         alt="Business"
                         className="w-40 h-40 object-contain mb-4"
                     />
@@ -26,7 +26,7 @@ export function Home() {
 
                 <div className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 flex flex-col items-center text-center">
                     <img
-                        src="./public/img/personal.png"
+                        src="/img/personal.png"
                         alt="Personal"
                         className="w-40 h-40 object-contain mb-4"
                     />

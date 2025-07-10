@@ -6,7 +6,7 @@ export default function BusinessTransactionList({ transactions, onEdit, onDelete
         return (
             <div className="flex flex-col items-center justify-center text-center py-10 text-gray-500">
                 <img
-                    src="./public/img/no_data.png"
+                    src="/img/no_data.png"
                     alt="No transactions"
                     className="w-40 h-40 mb-4"
                 />
