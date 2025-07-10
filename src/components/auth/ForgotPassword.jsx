@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/validation";
 
 export default function ForgotPassword() {
+    const formRef = useRef(null);
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
+
+    const scrollToForm = () => {
+        formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
 
     const handlePasswordReset = async (e) => {
         e.preventDefault();
@@ -18,6 +23,7 @@ export default function ForgotPassword() {
         const { isValid, errors } = validateEmail(email);
         if (!isValid) {
             setError(errors[0]);
+            scrollToForm();
             return;
         }
 
@@ -30,12 +36,13 @@ export default function ForgotPassword() {
             setError(err.message);
         } finally {
             setLoading(false);
+            scrollToForm();
         }
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 flex items-center justify-center px-4">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <div ref={formRef} className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
                 <h1 className="text-3xl font-extrabold text-indigo-700 mb-2 text-center">
                     Reset password
                 </h1>

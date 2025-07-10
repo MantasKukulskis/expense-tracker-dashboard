@@ -1,15 +1,24 @@
-import { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { useRef, useState } from "react";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { validatePassword, validateEmail } from "../../utils/validation";
 
 export default function Register() {
+    const formRef = useRef(null);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const scrollToForm = () => {
+        formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -18,22 +27,26 @@ export default function Register() {
         const { isValid: isEmailValid, errors: emailErrors } = validateEmail(email);
         if (!isEmailValid) {
             setError(emailErrors[0]);
+            scrollToForm();
             return;
         }
 
         const { isValid: isPasswordValid, errors: passwordErrors } = validatePassword(password);
         if (!isPasswordValid) {
             setError(passwordErrors[0]);
+            scrollToForm();
             return;
         }
 
         if (!confirmPassword) {
             setError("Confirm password is required");
+            scrollToForm();
             return;
         }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match");
+            scrollToForm();
             return;
         }
 
@@ -45,6 +58,7 @@ export default function Register() {
             navigate("/verify-email");
         } catch (err) {
             setError(err.message);
+            scrollToForm();
         } finally {
             setLoading(false);
         }
@@ -52,7 +66,7 @@ export default function Register() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 flex items-center justify-center px-4">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <div ref={formRef} className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
                 <div className="text-center">
                     <h1 className="text-3xl font-extrabold text-indigo-700 mb-2">Create Account</h1>
                     <p className="text-sm text-gray-600">Register to start using the app</p>

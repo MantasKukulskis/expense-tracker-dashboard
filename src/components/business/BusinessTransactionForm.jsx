@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -10,6 +11,8 @@ export default function BusinessTransactionForm({
     editingTransaction, setEditingTransaction,
     formError
 }) {
+    const formRef = useRef(null);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -40,27 +43,62 @@ export default function BusinessTransactionForm({
         }
     };
 
+    const handleFocus = () => {
+        setTimeout(() => {
+            formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 300); // šiek tiek palaukiam kol atsidaro klaviatūra
+    };
+
     return (
-        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md space-y-4">
-            <h2 className="text-xl font-semibold">
-                {editingTransaction ? "✏️ Edit Transaction" : "➕ Add New Transaction"}
-            </h2>
+        <div className="min-h-screen pt-6 px-4 overflow-auto" ref={formRef}>
+            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md space-y-4 max-w-xl mx-auto">
+                <h2 className="text-xl font-semibold">
+                    {editingTransaction ? "✏️ Edit Transaction" : "➕ Add New Transaction"}
+                </h2>
 
-            <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2 border rounded" />
-            <input type="number" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} min="0.01" step="0.01" className="w-full p-2 border rounded" />
+                <input
+                    type="text"
+                    placeholder="Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    onFocus={handleFocus}
+                    className="w-full p-2 border rounded"
+                />
+                <input
+                    type="number"
+                    placeholder="Amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    min="0.01"
+                    step="0.01"
+                    onFocus={handleFocus}
+                    className="w-full p-2 border rounded"
+                />
 
-            <select value={type} onChange={(e) => setType(e.target.value)} className="w-full p-2 border rounded">
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-            </select>
+                <select
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    onFocus={handleFocus}
+                    className="w-full p-2 border rounded"
+                >
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
 
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full p-2 border rounded" />
+                <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    onFocus={handleFocus}
+                    className="w-full p-2 border rounded"
+                />
 
-            <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg">
-                {editingTransaction ? "Save Changes" : "Add Transaction"}
-            </button>
+                <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg">
+                    {editingTransaction ? "Save Changes" : "Add Transaction"}
+                </button>
 
-            {formError && <p className="text-red-600 text-sm mt-2">{formError}</p>}
-        </form>
+                {formError && <p className="text-red-600 text-sm mt-2">{formError}</p>}
+            </form>
+        </div>
     );
 }

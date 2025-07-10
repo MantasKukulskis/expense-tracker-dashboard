@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { validateEmail } from "../../utils/validation";
 
 export default function Login() {
+    const formRef = useRef(null);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const scrollToForm = () => {
+        formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -17,11 +22,13 @@ export default function Login() {
         const { isValid: isEmailValid, errors: emailErrors } = validateEmail(email);
         if (!isEmailValid) {
             setError(emailErrors[0]);
+            scrollToForm();
             return;
         }
 
         if (!password) {
             setError("Password is required");
+            scrollToForm();
             return;
         }
 
@@ -32,11 +39,13 @@ export default function Login() {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (!userCredential.user.emailVerified) {
                 setError("Please verify your email before logging in");
+                scrollToForm();
                 return;
             }
             navigate("/");
         } catch (err) {
             setError("Invalid email or password");
+            scrollToForm();
         } finally {
             setLoading(false);
         }
@@ -44,7 +53,7 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 flex items-center justify-center px-4">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <div ref={formRef} className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
                 <div className="text-center">
                     <h1 className="text-3xl font-extrabold text-indigo-700 mb-2">
                         💸 Expense Tracker
