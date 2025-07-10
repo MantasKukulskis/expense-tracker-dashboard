@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function VerifyEmail() {
     const auth = getAuth();
+    const navigate = useNavigate();
     const [checking, setChecking] = useState(true);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function VerifyEmail() {
                 if (verified) {
                     clearInterval(interval);
                     console.log("Redirecting...");
-                    window.location.href = "/";
+                    navigate("/");
                 } else {
                     setChecking(false);
                 }
@@ -27,6 +28,11 @@ export default function VerifyEmail() {
 
         return () => clearInterval(interval);
     }, []);
+
+    const handleBackToLogin = async () => {
+        await signOut(auth);
+        navigate("/login");
+    };
 
     if (checking) {
         return (
@@ -43,10 +49,10 @@ export default function VerifyEmail() {
                     Once confirmed, this page will automatically redirect.
                 </p>
                 <button
-                    onClick={() => window.location.href = "/register"}
+                    onClick={handleBackToLogin}
                     className="mt-4 text-indigo-600 hover:underline"
                 >
-                    Back to Register
+                    Back to Login
                 </button>
             </div>
         </div>
