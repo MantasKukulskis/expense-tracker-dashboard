@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function VerifyEmail() {
@@ -27,12 +27,7 @@ export default function VerifyEmail() {
         }, 3000);
 
         return () => clearInterval(interval);
-    }, []);
-
-    const handleBackToLogin = async () => {
-        await signOut(auth);
-        navigate("/login");
-    };
+    }, [auth, navigate]);
 
     if (checking) {
         return (
@@ -48,11 +43,28 @@ export default function VerifyEmail() {
                     A verification link was sent to <b>{auth.currentUser?.email}</b>.<br />
                     Once confirmed, this page will automatically redirect.
                 </p>
+                <div className="flex justify-center gap-4">
+                    <button
+                        onClick={() => navigate("/register")}
+                        className="text-indigo-600 hover:underline"
+                    >
+                        Back to Register
+                    </button>
+                    <button
+                        onClick={() => navigate("/login")}
+                        className="text-gray-600 hover:underline"
+                    >
+                        Go to Login
+                    </button>
+                </div>
                 <button
-                    onClick={handleBackToLogin}
-                    className="mt-4 text-indigo-600 hover:underline"
+                    onClick={async () => {
+                        await auth.signOut();
+                        navigate("/login");
+                    }}
+                    className="text-sm text-red-500 hover:underline"
                 >
-                    Back to Login
+                    Logout and return to login
                 </button>
             </div>
         </div>
