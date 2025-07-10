@@ -21,7 +21,7 @@ export default function VerifyEmail() {
                     clearInterval(interval);
                     console.log("Redirecting...");
                     setRedirected(true);
-                    navigate("/login"); // ← BUVO /, dabar konkretus nukreipimas
+                    navigate("/", { replace: true });
                 } else {
                     setChecking(false);
                 }
@@ -65,16 +65,6 @@ export default function VerifyEmail() {
                         Go to Login
                     </button>
                 </div>
-
-                <button
-                    onClick={async () => {
-                        await auth.signOut();
-                        navigate("/login");
-                    }}
-                    className="text-sm text-red-500 hover:underline"
-                >
-                    Logout and return to login
-                </button>
             </div>
         </div>
     );
