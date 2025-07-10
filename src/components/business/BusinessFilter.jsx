@@ -12,7 +12,7 @@ export default function BusinessFilter({ selectedMonth, setSelectedMonth, monthO
                 <option value="all">All Months</option>
                 {monthOptions.map(month => (
                     <option key={month} value={month}>
-                        {new Date(month + '-01').toLocaleString('default', { month: 'long', year: 'numeric' })}
+                        {new Date(month + '-01').toLocaleString('en-US', { month: 'long', year: 'numeric' })}
                     </option>
                 ))}
             </select>

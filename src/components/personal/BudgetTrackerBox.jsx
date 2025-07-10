@@ -56,7 +56,7 @@ export default function BudgetTrackerBox({ user, selectedMonth, totalSpent, onBu
                         <option value="">-- Choose month --</option>
                         {(Array.isArray(monthOptions) ? monthOptions : []).map(month => (
                             <option key={month} value={month}>
-                                {new Date(month + '-01').toLocaleString('default', { month: 'long', year: 'numeric' })}
+                                {new Date(month + '-01').toLocaleString('en-US', { month: 'long', year: 'numeric' })}
                             </option>
                         ))}
                     </select>
