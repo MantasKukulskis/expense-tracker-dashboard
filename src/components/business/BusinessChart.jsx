@@ -1,16 +1,18 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = ['#34d399', '#f87171'];
 
 export default function BusinessChart({ income = 0, expenses = 0 }) {
+    const { t } = useTranslation();
     const hasData = income !== 0 || expenses !== 0;
 
     const chartData = hasData
         ? [
-            { name: 'Income', value: income },
-            { name: 'Expenses', value: Math.abs(expenses) }
+            { name: t("income"), value: income },
+            { name: t("expenses"), value: Math.abs(expenses) }
         ]
-        : [{ name: 'Empty', value: 1 }];
+        : [{ name: t("noData"), value: 1 }];
 
     const displayColors = hasData ? COLORS : ['#e5e7eb'];
     const total = income + Math.abs(expenses);
@@ -24,7 +26,7 @@ export default function BusinessChart({ income = 0, expenses = 0 }) {
     return (
         <div className="flex flex-col items-center gap-3">
             <h3 className="text-lg font-semibold text-gray-800 text-center">
-                Monthly Distribution
+                {t("monthlyDistribution")}
             </h3>
             <ResponsiveContainer width="100%" height={160}>
                 <PieChart>
@@ -63,7 +65,7 @@ export default function BusinessChart({ income = 0, expenses = 0 }) {
                     ))}
                 </div>
             ) : (
-                <p className="text-sm text-gray-400">No data available</p>
+                <p className="text-sm text-gray-400">{t("noData")}</p>
             )}
         </div>
     );

@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function Home() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
@@ -12,15 +14,15 @@ export function Home() {
                         alt="Business"
                         className="w-40 h-40 object-contain mb-4"
                     />
-                    <h2 className="text-xl font-semibold mb-2">Business Tracker</h2>
+                    <h2 className="text-xl font-semibold mb-2">{t("businessTracker")}</h2>
                     <p className="text-gray-600 mb-4 text-sm">
-                        Track your business income, expenses and budget in one place.
+                        {t("businessDescription")}
                     </p>
                     <button
                         onClick={() => navigate('/business')}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded"
                     >
-                        Go to Business
+                        {t("goToBusiness")}
                     </button>
                 </div>
 
@@ -30,15 +32,15 @@ export function Home() {
                         alt="Personal"
                         className="w-40 h-40 object-contain mb-4"
                     />
-                    <h2 className="text-xl font-semibold mb-2">Personal Tracker</h2>
+                    <h2 className="text-xl font-semibold mb-2">{t("personalTracker")}</h2>
                     <p className="text-gray-600 mb-4 text-sm">
-                        Stay on top of your daily spending and personal budget.
+                        {t("personalDescription")}
                     </p>
                     <button
                         onClick={() => navigate('/personal')}
                         className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded"
                     >
-                        Go to Personal
+                        {t("goToPersonal")}
                     </button>
                 </div>
             </div>

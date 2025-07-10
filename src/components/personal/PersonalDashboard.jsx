@@ -6,6 +6,7 @@ import {
     deleteDoc
 } from 'firebase/firestore';
 import { getAuth, signOut } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
 
 import PersonalHeader from './PersonalHeader';
 import PersonalFilter from './PersonalFilter';
@@ -14,10 +15,12 @@ import PersonalTransactionForm from './PersonalTransactionForm';
 import PersonalSummaryCard from './PersonalSummaryCard';
 import PersonalTransactionList from './PersonalTransactionList';
 import PersonalChart from './PersonalChart';
+import LanguageSelector from '../common/LanguageSelector';
 
 import { validateTransaction } from '../../utils/validation';
 
 export function PersonalDashboard({ user }) {
+    const { t } = useTranslation();
     const [transactions, setTransactions] = useState([]);
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
@@ -79,7 +82,7 @@ export function PersonalDashboard({ user }) {
             setFormError('');
         } catch (error) {
             console.error("❌ Firestore error:", error);
-            setFormError("Failed to add transaction. Please try again.");
+            setFormError(t("failedToAddTransaction"));
         }
     };
 
@@ -92,7 +95,7 @@ export function PersonalDashboard({ user }) {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Delete this transaction?')) {
+        if (window.confirm(t("confirmDeleteTransaction"))) {
             await deleteDoc(doc(db, 'transactions', id));
         }
     };
@@ -126,9 +129,12 @@ export function PersonalDashboard({ user }) {
     return (
         <div className="min-h-screen bg-gray-100 p-4 md:p-8">
             <div className="max-w-6xl mx-auto flex flex-col gap-6">
-                <PersonalHeader navigate={navigate} auth={auth} signOut={signOut} />
+                <div className="flex justify-between items-center">
+                    <PersonalHeader navigate={navigate} auth={auth} signOut={signOut} />
+                    <LanguageSelector />
+                </div>
 
-                <h2 className="text-lg font-semibold text-gray-700">Monthly Budget Planning</h2>
+                <h2 className="text-lg font-semibold text-gray-700">{t("budgetPlanning")}</h2>
                 <BudgetTrackerBox
                     user={user}
                     selectedMonth={selectedMonth}
@@ -166,7 +172,11 @@ export function PersonalDashboard({ user }) {
                         <PersonalSummaryCard food={food} fuel={fuel} entertainment={entertainment} />
                     </div>
                     <div className="md:flex-1 bg-white rounded shadow p-4">
-                        <PersonalChart categoryTotals={{ Food: food, Fuel: fuel, Entertainment: entertainment }} />
+                        <PersonalChart categoryTotals={{
+                            food,
+                            fuel,
+                            entertainment
+                        }} />
                     </div>
                 </div>
 

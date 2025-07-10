@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function PersonalFilter({
     selectedMonth,
@@ -11,18 +12,20 @@ export default function PersonalFilter({
     dateTo,
     setDateTo
 }) {
+    const { t } = useTranslation();
+
     return (
         <div className="bg-white p-4 rounded-xl shadow space-y-4">
             <div>
                 <label className="block text-sm mb-1 font-medium text-gray-600">
-                    Filter by month:
+                    {t("filterByMonth")}
                 </label>
                 <select
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(e.target.value)}
                     className="w-full border p-2 rounded"
                 >
-                    <option value="">All Months</option>
+                    <option value="">{t("allMonths")}</option>
                     {Array.isArray(monthOptions) && monthOptions.length > 0 &&
                         monthOptions.map(month => (
                             <option key={month} value={month}>
@@ -34,21 +37,21 @@ export default function PersonalFilter({
 
             <div>
                 <label className="block text-sm mb-1 font-medium text-gray-600">
-                    Filter by description:
+                    {t("filterByDescription")}
                 </label>
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full border p-2 rounded"
-                    placeholder="e.g. Maxima, Circle K..."
+                    placeholder={t("descriptionPlaceholder")}
                 />
             </div>
 
             <div className="flex gap-4">
                 <div className="w-1/2">
                     <label className="block text-sm mb-1 font-medium text-gray-600">
-                        Date from:
+                        {t("dateFrom")}
                     </label>
                     <input
                         type="date"
@@ -59,7 +62,7 @@ export default function PersonalFilter({
                 </div>
                 <div className="w-1/2">
                     <label className="block text-sm mb-1 font-medium text-gray-600">
-                        Date to:
+                        {t("dateTo")}
                     </label>
                     <input
                         type="date"

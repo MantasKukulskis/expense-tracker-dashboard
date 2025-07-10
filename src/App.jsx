@@ -2,6 +2,8 @@ import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { useEffect, useState } from 'react';
 
+import './i18n';
+
 import { Home } from './routes/Home';
 import { BusinessDashboardPage } from './routes/BusinessDashboard';
 import { PersonalDashboardPage } from './routes/PersonalDashboard';
@@ -23,7 +25,6 @@ export default function App() {
         const isVerified = currentUser.emailVerified;
         setVerified(isVerified);
 
-        // Jei vartotojas patvirtino el. paštą, aktyviai nukreipiam
         if (isVerified && window.location.pathname === '/verify-email') {
           navigate('/');
         }

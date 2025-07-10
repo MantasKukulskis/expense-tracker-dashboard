@@ -1,7 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Pencil, Trash2 } from "lucide-react";
 
 export default function BusinessTransactionList({ transactions, onEdit, onDelete }) {
+    const { t } = useTranslation();
+
     if (transactions.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center text-center py-10 text-gray-500">
@@ -10,12 +13,12 @@ export default function BusinessTransactionList({ transactions, onEdit, onDelete
                     alt="No transactions"
                     className="w-40 h-40 mb-4"
                 />
-                <p className="text-lg font-semibold">You have no transactions yet</p>
-                <p className="text-sm text-gray-400 mb-6">Start tracking your business income & expenses</p>
+                <p className="text-lg font-semibold">{t("noData")}</p>
+                <p className="text-sm text-gray-400 mb-6">{t("startTrackingBusiness")}</p>
 
                 <div className="flex items-center gap-2">
                     <span className="text-3xl text-blue-600 animate-bounce">👈</span>
-                    <p className="text-sm text-blue-600 font-medium">Add your first transaction on the left</p>
+                    <p className="text-sm text-blue-600 font-medium">{t("addFirstTransaction")}</p>
                 </div>
             </div>
         );
@@ -23,15 +26,15 @@ export default function BusinessTransactionList({ transactions, onEdit, onDelete
 
     return (
         <div className="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">Business Transactions</h3>
+            <h3 className="text-xl font-semibold mb-4 text-gray-800">{t("businessTransactions")}</h3>
             <table className="w-full border-collapse">
                 <thead>
                     <tr className="bg-blue-100 text-left text-gray-700">
-                        <th className="py-3 px-4 rounded-tl-lg">Description</th>
-                        <th className="py-3 px-4">Amount</th>
-                        <th className="py-3 px-4">Type</th>
-                        <th className="py-3 px-4">Date</th>
-                        <th className="py-3 px-4 rounded-tr-lg">Actions</th>
+                        <th className="py-3 px-4 rounded-tl-lg">{t("description")}</th>
+                        <th className="py-3 px-4">{t("amount")}</th>
+                        <th className="py-3 px-4">{t("type")}</th>
+                        <th className="py-3 px-4">{t("date")}</th>
+                        <th className="py-3 px-4 rounded-tr-lg">{t("actions")}</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function VerifyEmail() {
+    const { t } = useTranslation();
     const auth = getAuth();
     const navigate = useNavigate();
     const [checking, setChecking] = useState(true);
@@ -15,11 +17,9 @@ export default function VerifyEmail() {
             if (user) {
                 await user.reload();
                 const verified = user.emailVerified;
-                console.log("Checking emailVerified:", verified);
 
                 if (verified && !redirected) {
                     clearInterval(interval);
-                    console.log("Redirecting...");
                     setRedirected(true);
                     navigate("/", { replace: true });
                 } else {
@@ -34,7 +34,7 @@ export default function VerifyEmail() {
     if (checking) {
         return (
             <div className="text-center mt-20 text-gray-600">
-                Checking email verification...
+                {t("checkingVerification")}
             </div>
         );
     }
@@ -43,12 +43,12 @@ export default function VerifyEmail() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-blue-200 px-4">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6 text-center">
                 <h1 className="text-2xl font-bold text-indigo-700">
-                    Please verify your email
+                    {t("pleaseVerify")}
                 </h1>
                 <p className="text-gray-600">
-                    A verification link was sent to <b>{auth.currentUser?.email}</b>.
+                    {t("emailSent")} <b>{auth.currentUser?.email}</b>.
                     <br />
-                    Once confirmed, this page will automatically redirect.
+                    {t("autoRedirect")}
                 </p>
 
                 <div className="flex justify-center gap-4">
@@ -56,13 +56,13 @@ export default function VerifyEmail() {
                         onClick={() => navigate("/register")}
                         className="text-indigo-600 hover:underline"
                     >
-                        Back to Register
+                        {t("backToRegister")}
                     </button>
                     <button
                         onClick={() => navigate("/login")}
                         className="text-gray-600 hover:underline"
                     >
-                        Go to Login
+                        {t("goToLogin")}
                     </button>
                 </div>
             </div>

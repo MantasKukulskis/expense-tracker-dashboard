@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from "../../firebase";
 import {
@@ -6,16 +6,20 @@ import {
 } from 'firebase/firestore';
 import { getAuth, signOut } from 'firebase/auth';
 
+import { useTranslation } from 'react-i18next';
+
 import BusinessChart from './BusinessChart';
 import BusinessHeader from './BusinessHeader';
 import BusinessFilter from './BusinessFilter';
 import BusinessSummaryCard from './BusinessSummaryCard';
 import BusinessTransactionForm from './BusinessTransactionForm';
 import BusinessTransactionList from './BusinessTransactionList';
+import LanguageSelector from '../common/LanguageSelector';
 
 import { validateTransaction } from '../../utils/validation';
 
 export function BusinessDashboard({ user }) {
+    const { t } = useTranslation();
     const [transactions, setTransactions] = useState([]);
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
@@ -82,7 +86,7 @@ export function BusinessDashboard({ user }) {
     };
 
     const handleDelete = async (id) => {
-        const confirmed = window.confirm('Are you sure you want to delete this transaction?');
+        const confirmed = window.confirm(t("confirmDelete"));
         if (!confirmed) return;
         await deleteDoc(doc(db, 'transactions', id));
     };
@@ -104,12 +108,13 @@ export function BusinessDashboard({ user }) {
     const expenses = filtered.filter(tx => tx.amount < 0).reduce((sum, tx) => sum + tx.amount, 0);
     const balance = income + expenses;
 
-    const handleLogout = () => signOut(auth);
-
     return (
         <div className="min-h-screen bg-gray-100 p-4 md:p-8 overflow-x-hidden">
             <div className="max-w-6xl mx-auto flex flex-col gap-6">
-                <BusinessHeader navigate={navigate} auth={auth} signOut={signOut} />
+                <div className="flex justify-between items-center">
+                    <BusinessHeader navigate={navigate} auth={auth} signOut={signOut} />
+                    <LanguageSelector />
+                </div>
 
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="md:w-[500px] bg-white rounded shadow p-4 space-y-4">

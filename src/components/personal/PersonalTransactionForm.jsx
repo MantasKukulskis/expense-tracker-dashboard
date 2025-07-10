@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -11,6 +12,7 @@ export default function PersonalTransactionForm({
     editingTransaction, setEditingTransaction,
     formError
 }) {
+    const { t } = useTranslation();
     const formRef = useRef(null);
 
     const handleSubmit = async (e) => {
@@ -52,12 +54,12 @@ export default function PersonalTransactionForm({
         <div className="min-h-screen pt-6 px-4 overflow-auto" ref={formRef}>
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md space-y-4 max-w-xl mx-auto">
                 <h2 className="text-xl font-semibold">
-                    {editingTransaction ? "✏️ Edit Expense" : "➕ Add New Expense"}
+                    {editingTransaction ? "✏️ " + t("editExpense") : "➕ " + t("addExpense")}
                 </h2>
 
                 <input
                     type="text"
-                    placeholder="Description"
+                    placeholder={t("description")}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     onFocus={handleFocus}
@@ -65,7 +67,7 @@ export default function PersonalTransactionForm({
                 />
                 <input
                     type="number"
-                    placeholder="Amount"
+                    placeholder={t("amount")}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     min="0.01"
@@ -80,9 +82,9 @@ export default function PersonalTransactionForm({
                     onFocus={handleFocus}
                     className="w-full p-2 border rounded"
                 >
-                    <option value="food">Food</option>
-                    <option value="fuel">Fuel</option>
-                    <option value="entertainment">Entertainment</option>
+                    <option value="food">{t("food")}</option>
+                    <option value="fuel">{t("fuel")}</option>
+                    <option value="entertainment">{t("entertainment")}</option>
                 </select>
 
                 <input
@@ -94,7 +96,7 @@ export default function PersonalTransactionForm({
                 />
 
                 <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg">
-                    {editingTransaction ? "Save Changes" : "Add Expense"}
+                    {editingTransaction ? t("saveChanges") : t("addExpense")}
                 </button>
 
                 {formError && <p className="text-red-600 text-sm mt-2">{formError}</p>}

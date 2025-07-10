@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { validateEmail } from "../../utils/validation";
+import LanguageSelector from "../common/LanguageSelector";
 
 export default function Login() {
+    const { t } = useTranslation();
     const formRef = useRef(null);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,13 +24,13 @@ export default function Login() {
 
         const { isValid: isEmailValid, errors: emailErrors } = validateEmail(email);
         if (!isEmailValid) {
-            setError(emailErrors[0]);
+            setError(t("invalidEmail"));
             scrollToForm();
             return;
         }
 
         if (!password) {
-            setError("Password is required");
+            setError(t("passwordRequired") || "Password is required");
             scrollToForm();
             return;
         }
@@ -38,13 +41,13 @@ export default function Login() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (!userCredential.user.emailVerified) {
-                setError("Please verify your email before logging in");
+                setError(t("verifyEmail"));
                 scrollToForm();
                 return;
             }
             navigate("/");
         } catch (err) {
-            setError("Invalid email or password");
+            setError(t("invalidLogin"));
             scrollToForm();
         } finally {
             setLoading(false);
@@ -53,18 +56,22 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 flex items-center justify-center px-4">
-            <div ref={formRef} className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <div className="absolute top-4 right-4">
+                <LanguageSelector />
+            </div>
+
+            <div ref={formRef} className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6 relative z-10">
                 <div className="text-center">
                     <h1 className="text-3xl font-extrabold text-indigo-700 mb-2">
                         💸 Expense Tracker
                     </h1>
-                    <p className="text-sm text-gray-600">Log in to your account</p>
+                    <p className="text-sm text-gray-600">{t("loginSubtitle")}</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-4">
                     <input
                         type="email"
-                        placeholder="Email"
+                        placeholder={t("email")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -72,7 +79,7 @@ export default function Login() {
                     />
                     <input
                         type="password"
-                        placeholder="Password"
+                        placeholder={t("password")}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -84,7 +91,7 @@ export default function Login() {
                             to="/forgot-password"
                             className="text-sm text-indigo-600 hover:underline"
                         >
-                            Forgot password?
+                            {t("forgotPassword")}
                         </Link>
                     </div>
 
@@ -93,7 +100,7 @@ export default function Login() {
                         disabled={loading}
                         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md transition duration-200 font-semibold"
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? t("loggingIn") : t("login")}
                     </button>
                 </form>
 
@@ -101,12 +108,12 @@ export default function Login() {
 
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
-                        Don't have an account?{" "}
+                        {t("noAccount")}{" "}
                         <Link
                             to="/register"
                             className="text-indigo-600 hover:underline font-medium"
                         >
-                            Register here
+                            {t("registerHere")}
                         </Link>
                     </p>
                 </div>

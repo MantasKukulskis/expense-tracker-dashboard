@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { useTranslation } from "react-i18next";
 
 export default function BusinessTransactionForm({
     description, setDescription,
@@ -11,6 +12,7 @@ export default function BusinessTransactionForm({
     editingTransaction, setEditingTransaction,
     formError
 }) {
+    const { t } = useTranslation();
     const formRef = useRef(null);
 
     const handleSubmit = async (e) => {
@@ -46,19 +48,19 @@ export default function BusinessTransactionForm({
     const handleFocus = () => {
         setTimeout(() => {
             formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 300); // šiek tiek palaukiam kol atsidaro klaviatūra
+        }, 300);
     };
 
     return (
         <div className="min-h-screen pt-6 px-4 overflow-auto" ref={formRef}>
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-md space-y-4 max-w-xl mx-auto">
                 <h2 className="text-xl font-semibold">
-                    {editingTransaction ? "✏️ Edit Transaction" : "➕ Add New Transaction"}
+                    {editingTransaction ? `✏️ ${t("editTransaction")}` : `➕ ${t("addTransaction")}`}
                 </h2>
 
                 <input
                     type="text"
-                    placeholder="Description"
+                    placeholder={t("description")}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     onFocus={handleFocus}
@@ -66,7 +68,7 @@ export default function BusinessTransactionForm({
                 />
                 <input
                     type="number"
-                    placeholder="Amount"
+                    placeholder={t("amount")}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     min="0.01"
@@ -81,8 +83,8 @@ export default function BusinessTransactionForm({
                     onFocus={handleFocus}
                     className="w-full p-2 border rounded"
                 >
-                    <option value="income">Income</option>
-                    <option value="expense">Expense</option>
+                    <option value="income">{t("income")}</option>
+                    <option value="expense">{t("expense")}</option>
                 </select>
 
                 <input
@@ -94,7 +96,7 @@ export default function BusinessTransactionForm({
                 />
 
                 <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg">
-                    {editingTransaction ? "Save Changes" : "Add Transaction"}
+                    {editingTransaction ? t("saveChanges") : t("addTransaction")}
                 </button>
 
                 {formError && <p className="text-red-600 text-sm mt-2">{formError}</p>}

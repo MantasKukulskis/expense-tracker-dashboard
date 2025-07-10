@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { validateEmail } from "../../utils/validation";
 
 export default function ForgotPassword() {
+    const { t } = useTranslation();
     const formRef = useRef(null);
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
@@ -22,7 +24,7 @@ export default function ForgotPassword() {
 
         const { isValid, errors } = validateEmail(email);
         if (!isValid) {
-            setError(errors[0]);
+            setError(t("invalidEmail"));
             scrollToForm();
             return;
         }
@@ -31,7 +33,7 @@ export default function ForgotPassword() {
         try {
             const auth = getAuth();
             await sendPasswordResetEmail(auth, email);
-            setMessage("Check your email. We sent a reset link.");
+            setMessage(t("checkEmail"));
         } catch (err) {
             setError(err.message);
         } finally {
@@ -44,13 +46,13 @@ export default function ForgotPassword() {
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 flex items-center justify-center px-4">
             <div ref={formRef} className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
                 <h1 className="text-3xl font-extrabold text-indigo-700 mb-2 text-center">
-                    Reset password
+                    {t("resetPassword")}
                 </h1>
 
                 <form onSubmit={handlePasswordReset} className="space-y-4">
                     <input
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder={t("enterEmail")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -62,7 +64,7 @@ export default function ForgotPassword() {
                         disabled={loading}
                         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md transition duration-200 font-semibold"
                     >
-                        {loading ? "Sending..." : "Send reset link"}
+                        {loading ? t("sending") : t("sendReset")}
                     </button>
                 </form>
 
@@ -75,7 +77,7 @@ export default function ForgotPassword() {
                         onClick={() => navigate("/login")}
                         className="text-sm text-indigo-600 hover:underline"
                     >
-                        Return to login
+                        {t("returnToLogin")}
                     </button>
                 </div>
             </div>

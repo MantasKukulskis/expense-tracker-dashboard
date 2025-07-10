@@ -1,15 +1,20 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = ['#60a5fa', '#fbbf24', '#34d399'];
 
 export default function PersonalChart({ categoryTotals }) {
-    const chartData = Object.entries(categoryTotals).map(([name, value]) => ({ name, value }));
+    const { t } = useTranslation();
+    const chartData = Object.entries(categoryTotals).map(([name, value]) => ({
+        name: t(name), // išversime kategorijų pavadinimus
+        value
+    }));
     const hasData = chartData.some(entry => entry.value > 0);
 
     const displayColors = hasData ? COLORS : ['#e5e7eb'];
     const total = chartData.reduce((sum, item) => sum + item.value, 0);
 
-    const renderLabel = ({ name, value }) => {
+    const renderLabel = ({ value }) => {
         if (!hasData || total === 0) return '';
         const percent = ((value / total) * 100).toFixed(0);
         return `${percent}%`;
@@ -18,12 +23,12 @@ export default function PersonalChart({ categoryTotals }) {
     return (
         <div className="flex flex-col items-center gap-3">
             <h3 className="text-lg font-semibold text-gray-800 text-center">
-                Expense Distribution
+                {t("expenseDistribution")}
             </h3>
             <ResponsiveContainer width="100%" height={160}>
                 <PieChart>
                     <Pie
-                        data={hasData ? chartData : [{ name: 'Empty', value: 1 }]}
+                        data={hasData ? chartData : [{ name: t("noData"), value: 1 }]}
                         cx="50%"
                         cy="50%"
                         outerRadius={60}
@@ -32,7 +37,7 @@ export default function PersonalChart({ categoryTotals }) {
                         label={hasData ? renderLabel : false}
                         labelStyle={{ fontSize: 12, fill: "#374151" }}
                     >
-                        {(hasData ? chartData : [{ name: 'Empty', value: 1 }]).map((entry, index) => (
+                        {(hasData ? chartData : [{ name: t("noData"), value: 1 }]).map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={displayColors[index % displayColors.length]} />
                         ))}
                     </Pie>
@@ -57,8 +62,8 @@ export default function PersonalChart({ categoryTotals }) {
                     ))}
                 </div>
             ) : (
-                <p className="text-sm text-gray-400">No data available</p>
+                <p className="text-sm text-gray-400">{t("noData")}</p>
             )}
         </div>
     );
-} 
+}
