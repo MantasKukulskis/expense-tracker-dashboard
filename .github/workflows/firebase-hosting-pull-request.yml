@@ -25,4 +25,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_EXPENSE_TRACKER_DASHBOAR_7CA0C }}"
           channelId: live
-          projectId: projectId: expense-tracker-dashboar-7ca0c
+          projectId: expense-tracker-dashboar-7ca0c
