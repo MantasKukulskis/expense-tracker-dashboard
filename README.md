@@ -1,50 +1,51 @@
 # 💰 Expense Tracker Dashboard
 
-## 🌟 About
+A modern, full-featured web application for tracking both personal and business expenses. Built with **React**, **Firebase**, and **Tailwind CSS**, this project offers authentication, email verification, monthly budgeting, and real-time data sync. Designed for speed, clarity, and usability on all devices.
 
-A modern and feature-rich web app to track your **personal** and **business** expenses, manage budgets, and gain insights into your spending habits. Built with **React**, **Firebase**, and **Tailwind CSS**, the app ensures a smooth and responsive user experience, including **authentication**, **email verification**, and **real-time data sync**.
+---
 
-🔗 **Live site (deploy your own)**: _[your-firebase-url]_  
-📁 **Source code**: https://github.com/MantasKukulskis/expense-tracker-dashboard
+## 🌐 Live Demo
+
+🔗 [Live Site](https://expense-tracker-dashboar-7ca0c.web.app/)  
+📁 [Source Code](https://github.com/MantasKukulskis/expense-tracker-dashboard)
 
 ---
 
 ## 🎯 Features
 
-- ✅ Register and login with Firebase Authentication
-- ✅ Email verification system (with auto-check and redirect)
+- ✅ Firebase Authentication (register/login)
+- ✅ Email verification + auto-redirect
 - ✅ Password reset via email
-- ✅ Add, edit, and delete transactions for both **personal** and **business** categories
+- ✅ Add/edit/delete transactions (personal & business)
 - ✅ Custom categories: food, fuel, entertainment, income, expenses
-- ✅ Monthly budget setting and real-time tracking
-- ✅ Intelligent filtering:
-  - Filter by month, date range, and keyword
-- ✅ Summary cards with spending breakdown
-- ✅ Pie chart visualization
+- ✅ Set monthly budget & track balance in real time
+- ✅ Filter by month, date range, or keyword
+- ✅ Real-time Firestore data sync
+- ✅ Summary cards + pie chart visualization
 - ✅ Input validation with custom error messages
-- ✅ Responsive layout for mobile and desktop
-- ✅ Built with modular, reusable components
+- ✅ Responsive layout (mobile & desktop)
+- ✅ Modular and reusable React components
 
 ---
 
-## 🚀 Tech Stack
+## 🛠 Tech Stack
 
 - **Frontend:** React, React Router, Tailwind CSS
-- **Backend:** Firebase (Firestore + Auth)
+- **Backend:** Firebase (Firestore, Auth)
 - **Build Tool:** Vite
-- **Hosting:** Firebase Hosting (optional)
+- **Hosting:** Firebase Hosting
 
 ---
 
-## 🧰 Getting Started
+## 🚀 Getting Started
 
-### 💻 Prerequisites
+### Prerequisites
 
-- Node.js – [Download](https://nodejs.org/)
-- Git – [Download](https://git-scm.com/)
-- A Firebase project – [Create one](https://console.firebase.google.com/)
+- [Node.js](https://nodejs.org)
+- [Git](https://git-scm.com)
+- A [Firebase project](https://console.firebase.google.com)
 
-### 📦 Install and run locally
+### Installation
 
 ```bash
 git clone https://github.com/MantasKukulskis/expense-tracker-dashboard.git
@@ -52,44 +53,42 @@ cd expense-tracker-dashboard
 npm install
 npm run dev
 
-Visit http://localhost:5173
-🔐 Firebase Configuration
+Then open http://localhost:5173
+🔐 Firebase Setup
 
-    Create a project in Firebase Console
+    Create a Firebase project
 
-    Enable Authentication (Email/Password)
+    Enable Email/Password Authentication
 
     Create a Firestore database
 
-    Add your Firebase config to firebase.js
+    Add Firebase config to src/firebase.js:
 
-// src/firebase.js
 const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
   ...
 };
 
-    Add a serviceAccountKey.json file (if using Admin SDK for cleanup tasks)
-
+(Optional) Add serviceAccountKey.json if using Admin SDK (for future automation or clean-up tools)
 🧪 Testing
 
-No automated tests yet. Manual QA is recommended.
+Automated testing not yet implemented.
+Manual QA is recommended to verify input validation, filtering, and budget logic.
 👨‍💻 Author
 
-    Mantas Kukulskis — GitHub
-
+Mantas Kukulskis
+📎 https://github.com/MantasKukulskis
 ⚠️ License
 
-MIT License — see LICENSE.txt for details.
+Licensed under the MIT License
 📚 References
 
-    React Docs
+    React Documentation
 
     Tailwind CSS
 
     Firebase Docs
 
-    Vite.js
-    <!-- Trigger workflow -->
+    Vite
